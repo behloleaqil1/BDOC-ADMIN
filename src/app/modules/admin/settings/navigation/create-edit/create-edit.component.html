@@ -1,0 +1,88 @@
+<form [formGroup]="formGroup" (submit)="submitNavigation()" class="flex flex-col flex-auto p-6 sm:p-8 ">
+    <ng-container *ngFor="let error of keys()">
+        <app-alerts
+            type="warn"
+            [heading]="error"
+            [description]="errors[error]"
+        ></app-alerts>
+    </ng-container>
+
+    <mat-form-field class="w-full">
+        <mat-label>
+            ID
+        </mat-label>
+        <input formControlName="id" matInput>
+    </mat-form-field>
+    <mat-form-field class="w-full">
+        <mat-label>
+            Title
+        </mat-label>
+        <input formControlName="title" matInput>
+    </mat-form-field>
+    <mat-form-field class="w-full">
+        <mat-label>
+            Subtitle
+        </mat-label>
+        <input formControlName="subtitle" matInput>
+    </mat-form-field>
+    <mat-form-field class="w-full">
+        <mat-label>
+            URL
+        </mat-label>
+        <input formControlName="link" matInput>
+    </mat-form-field>
+    <mat-form-field class="w-full">
+        <mat-label>
+            Type
+        </mat-label>
+        <mat-select formControlName="type" class="w-full">
+            <mat-option value="group">Group</mat-option>
+            <mat-option value="collapsable">Collapsable</mat-option>
+            <mat-option value="basic">Basic</mat-option>
+            <mat-option value="divider">Divider</mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <mat-checkbox
+        formControlName="isParent" color="primary">
+        <mat-label>Is Parent?</mat-label>
+    </mat-checkbox>
+    <mat-checkbox
+        formControlName="exactMatch" color="primary">
+        <mat-label>Exact Match?</mat-label>
+    </mat-checkbox>
+
+    <mat-form-field class="w-full">
+        <mat-label>
+            Parent
+        </mat-label>
+        <mat-select formControlName="parentId" class="w-full">
+            <ng-container *ngFor="let singleNavigation of parentNavigation">
+                <mat-option [value]="singleNavigation?.uuid">
+                    <div class="option-content">
+                        <div class="row">
+                            <div class="col">{{ singleNavigation?.title }}</div>
+                        </div>
+                    </div>
+                </mat-option>
+            </ng-container>
+        </mat-select>
+    </mat-form-field>
+    <mat-form-field class="w-full">
+        <mat-label>
+            Icons
+        </mat-label>
+        <input matInput formControlName="icon">
+    </mat-form-field>
+    <mat-form-field class="w-full" *ngIf="data?.children">
+        <mat-label>
+            Children
+        </mat-label>
+        <mat-select formControlName="children" multiple *ngIf="flatNavigation">
+            <mat-option *ngFor="let child of flatNavigation"
+                        [value]="child?.uuid">{{child.title}}</mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <button mat-flat-button type="submit" color="primary">Submit</button>
+</form>
